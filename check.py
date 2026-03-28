@@ -1,19 +1,10 @@
 import os
 import requests
-import feedparser
-
-RSS = "https://www.youtube.com/feeds/videos.xml?channel_id=UCshyfrLaCobJZJzhEnvMwtg"
-CHAT_ID = "-1003710777199"
 
 TOKEN = os.environ["TOKEN"]
+CHAT_ID = "-1003710777199"
 
-feed = feedparser.parse(RSS)
-entry = feed.entries[0]
-
-title = entry.title
-link = entry.link
-
-text = f"🚀 New Video or Live Stream! \n\n{title}\n\n{link}"
+text = "🚀 TEST\n\n If you see this message, Mike is a genius and made his first bot hosted on Github. Youtube Feed + Auto Post should work. Fingers crossed."
 
 send = requests.get(
     f"https://api.telegram.org/bot{TOKEN}/sendMessage",
