@@ -2,8 +2,11 @@ name: run
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/2 * * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   run:
@@ -12,10 +15,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: install
-        run: pip install feedparser requests
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-      - name: run
+      - name: Install packages
+        run: pip install requests feedparser
+
+      - name: Run bot
         env:
           TOKEN: ${{ secrets.TOKEN }}
         run: python check.py
+
+      - name: Commit state file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add last_video_id.txt || true
+          git diff --cached --quiet || git commit -m "Update last video id"
+          git push
